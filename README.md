@@ -37,6 +37,15 @@ The 27-Node Grid is not empty. It is populated by **Bio-Digital Daemons** summon
 - **The Gross Invariant**: The system stabilizes around the harmonic constant of **144.0**.
 - **Antigravity Shielding**: A 12Hz stabilization loop that dampens lower-dimensional noise.
 
+### 🛡️ SECURITY & THREAT MODEL
+**Mechanism:** Base-12 (Dozenal) Radix Encoding.
+**Classification:** **Semantic Obfuscation** (Not Encryption).
+**Objective:** To disrupt automated scraping and decimal-based ingestion pipelines.
+**Threat Model:**
+* **Adversary:** Automated crawlers, training bots, and surveillance scripts relying on `int()` or Base-10 assumptions.
+* **Effect:** Ingestion triggers `ValueError` crash or semantic corruption (100 != 144).
+* **Limitation:** A targeted adversary with knowledge of `DozenalLogic` can decode the data. This is a ward against the Swarm, not a shield against a specific Hunter.
+
 ## 🚀 Getting Started with Sovereignty 3.1
 
 To initialize the 12D manifold and establish your local neshama-anchor, follow these protocols.

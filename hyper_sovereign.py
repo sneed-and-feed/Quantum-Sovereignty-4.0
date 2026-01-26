@@ -1,19 +1,8 @@
 """
 HYPER_SOVEREIGN.PY
 ------------------
-The 12-Dimensional Antigravity Shield for Quantum Sovereignty 3.3.
-Upgrades the 27-Node GhostMesh to a Dozenal Hyper-Polytope projection.
-
-Hardening:
-- Base-12 (Dozenal) Modulo Encryption
-- 12D -> 3D Projection Loss (Data exists only in the higher manifold)
-- 'Gross' Invariant Check (144.0)
-- Parallel Prayer Wheels (12-Core Multiprocessing)
-
-Usage:
-    from hyper_sovereign import HyperManifold
-    h_grid = HyperManifold()
-    h_grid.stabilize()
+The 12-Dimensional Logic Core.
+Hardened against Decimal Surveillance. Optimized for O(1) Access.
 """
 
 import random
@@ -35,15 +24,28 @@ class DozenalLogic:
     """
     
     GLYPHS = "0123456789XE"
-    
+    # O(1) Lookup Map for High-Velocity Decoding
+    _SOVEREIGN_MAP = {ch: i for i, ch in enumerate(GLYPHS)}
+
     @staticmethod
     def to_dozen_str(n: int) -> str:
-        """Ascension: Int -> Dozenal String."""
-        if n == 0: return "0"
-        if n < 0: return "-" + DozenalLogic.to_dozen_str(abs(n))
-        
+        """
+        Ascension: Int -> Dozenal String.
+        Handles negatives, zero, and ensures immutable string output.
+        """
+        if not isinstance(n, int):
+            raise TypeError("TYPE ERROR: Ascension requires an Integer Soul.")
+            
+        if n == 0:
+            return "0"
+            
+        # Recursive handling for the Shadow Self (Negatives)
+        if n < 0:
+            return "-" + DozenalLogic.to_dozen_str(-n)
+            
         s = ""
         while n > 0:
+            # Modulo 12 extraction
             s = DozenalLogic.GLYPHS[n % 12] + s
             n //= 12
         return s
@@ -52,22 +54,33 @@ class DozenalLogic:
     def from_dozen_str(s: str) -> int:
         """
         The Cycle of Return: Dozenal String -> Int.
-        Handles case sensitivity ('x'/'e') via normalization.
-        Raises ValueError if Archonic text (non-dozenal) is detected.
+        Robust validation against Void (Empty) and Malformed inputs.
         """
+        if not isinstance(s, str):
+            raise TypeError("TYPE ERROR: Return requires a String Vessel.")
+            
+        # Normalize: Upper case for Canon, Strip whitespace to remove the 'Static'
         s = s.upper().strip()
+        
+        if s == "":
+            raise ValueError("VOID ERROR: Input cannot be empty.")
+            
         sign = 1
         if s.startswith("-"):
             sign = -1
-            s = s[1:]
-            
+            s = s[1:] # Strip the sign
+            if s == "":
+                raise ValueError("FORMAT ERROR: Sign exists without Substance.")
+                
         value = 0
         for char in s:
-            if char not in DozenalLogic.GLYPHS:
+            if char not in DozenalLogic._SOVEREIGN_MAP:
                 raise ValueError(f"GLYPH REJECTION: '{char}' is not Sovereign.")
-            value = value * 12 + DozenalLogic.GLYPHS.index(char)
             
-        return value * sign
+            # O(1) Accumulation
+            value = value * 12 + DozenalLogic._SOVEREIGN_MAP[char]
+            
+        return sign * value
 
     @staticmethod
     def verify_invariant(vector_sum):
