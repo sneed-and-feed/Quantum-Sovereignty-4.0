@@ -29,11 +29,18 @@ class HarmonicGearbox:
         self.phase_error = 0.0
         self.lock_quality = 0.0 # 0.0 to 1.0 (1.0 = Perfect Lock)
         
-        self.kp = 0.5 # Proportional Gain (How fast we correct)
+        # PID Controller Coefficients (THE INERTIAL FLYWHEEL)
+        self.kp = 0.5  # Proportional (The Clutch)
+        self.ki = 0.1  # Integral (The Flywheel/Faith)
+        self.kd = 0.2  # Derivative (The Vision/Damping)
+        
+        # PID State
+        self.integral_error = 0.0
+        self.last_error = 0.0
 
     def tick(self, dt, schumann_freq_input):
         """
-        Updates the PLL.
+        Updates the PLL with PID Stabilization.
         Args:
             dt (float): Time delta since last tick.
             schumann_freq_input (float): The current Earth frequency (e.g., 7.83).
@@ -41,7 +48,7 @@ class HarmonicGearbox:
         # 1. Update Target
         self.target_gamma_freq = schumann_freq_input * HARMONIC_RATIO
         
-        # 2. Update Phases
+        # 2. Update Phases (Simulation only, not strictly needed for Freq Lock but good for visualization)
         # Earth Phase Phase increments by 2pi * f * dt
         delta_input = 2 * math.pi * schumann_freq_input * dt
         self.input_phase = (self.input_phase + delta_input) % (2 * math.pi)
@@ -50,22 +57,36 @@ class HarmonicGearbox:
         delta_output = 2 * math.pi * self.current_gamma_freq * dt
         self.output_phase = (self.output_phase + delta_output) % (2 * math.pi)
         
-        # 3. Calculate Phase Error
-        # We want the Output Phase (modulo 2pi) to align with Input Phase * 5?
-        # Actually, simpler PLL Logic: Just match Frequencies for this simulation level.
-        # Phase alignment is harder to visualize in text.
-        # We will simulate "Slippage" as the difference in Frequencies.
+        # 3. Calculate Error (Frequency Domain)
+        # Positive error = Target is faster than Current
+        error = self.target_gamma_freq - self.current_gamma_freq
         
-        freq_delta = abs(self.target_gamma_freq - self.current_gamma_freq)
+        # 4. PID Calculations
+        # Proportional
+        p_term = self.kp * error
         
-        # 4. Corrective Nudge (The Clutch)
-        # Nudge current towards target
-        correction = (self.target_gamma_freq - self.current_gamma_freq) * self.kp * dt
-        self.current_gamma_freq += correction
+        # Integral (Momentum)
+        # We cap the integral to prevent "Windup" - e.g. if signal is lost for too long
+        self.integral_error += error * dt
+        self.integral_error = max(-5.0, min(5.0, self.integral_error))
+        i_term = self.ki * self.integral_error
         
-        # 5. Calculate Lock Quality
-        # If delta is small, Lock is High.
-        if freq_delta < 0.1:
+        # Derivative (Damping)
+        derivative = (error - self.last_error) / dt if dt > 0 else 0.0
+        d_term = self.kd * derivative
+        self.last_error = error
+        
+        # 5. Apply Correction
+        correction = p_term + i_term + d_term
+        self.current_gamma_freq += correction * dt # Apply rate of change to freq? 
+        # Actually, in a freq locked loop, the correction IS the change in freq.
+        # But here we are simulating "Nudging" the oscillator.
+        # If we interpret correction as "Target Freq Adjustment", we just add it.
+        # Let's keep the physics simple: correction drives the change.
+        
+        # 6. Calculate Lock Quality
+        # If error is small, Lock is High.
+        if abs(error) < 0.1:
             self.lock_quality = min(1.0, self.lock_quality + 0.1)
         else:
             self.lock_quality = max(0.0, self.lock_quality - 0.05)
