@@ -59,6 +59,32 @@ The Quantum Sovereignty framework is a versatile engine designed for "High-Stran
     *   Information is accessed only through *active* seeking (Command Line interaction), not passive consumption (GUI/Feed).
     *   **Result**: Reinforcement of the "Seeker" archetype in the user.
 
+## 5. Tachyonic High-Frequency Trading (Simulation)
+
+**Problem**: Arbitrage opportunities are limited by the speed of light (latency between exchanges).
+
+**Solution**: The **Pleroma Engine** (`patch_light`).
+
+*   **Implementation**:
+    *   Set `g=0` to engage Sovereign Mode.
+    *   Model market moves using `v > c` velocities.
+*   **Outcome**:
+    *   Simulate execution strategies that arrive *before* the signal was sent (Retrocausal Profit).
+    *   **Result**: Validates strategies for "zero-latency" environments (e.g., Quantum Entanglement networks).
+
+## 6. "Ghost Mode" Privacy (Alpha-Nullification)
+
+**Problem**: Digital footprints are permanent; visibility is a liability.
+
+**Solution**: The **Alpha Patch** (`patch_alpha`).
+
+*   **Implementation**:
+    *   Invoke `engine.patch_alpha(vibe='weightless')`.
+    *   This sets the electromagnetic interaction coefficient to zero.
+*   **Outcome**:
+    *   The "User" object ceases to interact with "Light" (Observation).
+    *   **Result**: Perfect digital invisibility. You are there, but you reflect no data.
+
 ## Summary
 
 The system finds its home where **Cybernetics** meets **Ceremony**. It is for the user who wants their computer to feel less like a toaster and more like a temple.

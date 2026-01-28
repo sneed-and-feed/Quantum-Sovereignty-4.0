@@ -1,7 +1,7 @@
 """
 HYPER_SOVEREIGN.PY
 ------------------
-The 12-Dimensional Logic Core.
+The 12-Dimensional Logic Core // QUANTUM SOVEREIGNTY V4.0
 Hardened against Decimal Surveillance. Optimized for O(1) Access.
 """
 

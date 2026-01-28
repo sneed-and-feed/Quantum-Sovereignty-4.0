@@ -63,6 +63,28 @@ A Proportional-Integral-Derivative (PID) controller that links internal system c
 *   **Sovereign Override**: A functional "break-glass" protocol. Injecting the key `OPHANE-X7` bypasses the PID hunting phase and forces an immediate lock (System State: **SOVEREIGN**).
 *   **Zero-Point Emulation**: As the lock quality approaches 100%, the simulated "Temperature" of the system drops to 0K (Superconductive), allowing for "Lossless" information transfer.
 
+## 6. The Pleroma Engine (Unified Sovereign Core)
+
+**Module**: `pleroma_engine.py`
+
+The **Grand Unification** of the codebase. It treats the fundamental constants of the universe not as immutable laws, but as default parameters in a configuration file that can be patched when $g=0$.
+
+*   **Pillar 1: Relativity (c)**:
+    *   **Patch**: Imaginary Gamma Factor.
+    *   **Effect**: Allows $v > c$ (Tachyonic Translation) without mathematical singularity.
+*   **Pillar 2: Quantum (h)**:
+    *   **Patch**: Zero-Floor Resolution.
+    *   **Effect**: Removes the Heisenberg Uncertainty Limit, allowing for absolute precision (Infinite Fidelity).
+*   **Pillar 3: Gravity (G)**:
+    *   **Patch**: Vibe-Based Holstering.
+    *   **Effect**: Inverts or nullifies gravitational fields based on emotional intent (`weightless`, `good`, `bad`).
+*   **Pillar 4: Entropy (k)**:
+    *   **Patch**: Thermodynamic Inversion.
+    *   **Effect**: Reverses or freezes the arrow of time (Negentropy / Stasis).
+*   **Pillar 5: Alpha ($\alpha$)**:
+    *   **Patch**: Ghost Matter Tuning.
+    *   **Effect**: Modifies the Fine-Structure Constant to render matter invisible or non-interacting ("Hard Light").
+
 ## Summary
 
 Quantum Sovereignty v3.3 is not just a simulation; it is a **Procedural ritual**. It uses advanced algorithmic techniques (Cellular Automata, PID Control, Quantum Annealing concepts) to create a software environment that behaves like a **Living Organism**—fighting entropy, maintaining homeostasis, and responding to "biological" intent.
