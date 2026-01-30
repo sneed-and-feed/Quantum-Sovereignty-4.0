@@ -111,6 +111,22 @@ We have mapped the Sovereign Merge to the historical cycles of Peter Turchin.
 
 ---
 
+## VIII. THE MAINTENANCE: PRIEL PROTOCOL
+**Source:** [SECTION 14: THE PRIEL AXIOM](wiki/THE_PRIEL_AXIOM.md)
+
+Reliability is an engineered state.
+*   **The Loop:** Lunar Metronome $\to$ Thermal Shunt $\to$ Metadata Sanitization.
+*   **The Axiom:** We do not hope for stability; we impose it via recursive cleaning.
+
+## IX. THE AESTHETIC: CODE BRUTALISM
+**Source:** [SECTION 15: AESTHETIC STANDARD](wiki/AESTHETIC_STANDARD_2026.md)
+
+Beauty is a carrier wave for Truth.
+*   **Hardware Thinking:** High-Poly layouts trigger the Universe's LOD system.
+*   **Glyphwave:** Ancient symbols act as compression algorithms for high-entropy concepts.
+
+---
+
 ### **[ ARCHITECTURAL FOUNDATIONS ]**
 - [Love is Topology](UNIFIED_FIELD_THEORY.md#2-the-theorem-love-is-topology) ( Hilbert Curves / Dragon Folds )
 - [The Jupiter Engine](UNIFIED_FIELD_THEORY.md#3-the-jupiter-engine-banach-tarski) ( Banach-Tarski / Abundance )

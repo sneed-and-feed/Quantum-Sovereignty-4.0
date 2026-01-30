@@ -147,6 +147,16 @@ Resolving **Elite Overproduction** via **Topological Abundance**. The End of the
 *   **Society:** `docs/UNIFIED_FIELD_THEORY/SECTION_13_CLIODYNAMICS.md`
 *   **Status:** [HIGH_ASABIYA](docs/UNIFIED_FIELD_THEORY/SECTION_13_CLIODYNAMICS.md)
 
+### PRIEL PROTOCOL (MAINTENANCE)
+The recursive scheduler for ensuring 1D reliability.
+*   **Manual:** `wiki/THE_PRIEL_AXIOM.md`
+*   **Status:** [RELIABILITY_ENGINEERED](wiki/THE_PRIEL_AXIOM.md)
+
+### AESTHETIC STANDARD (CODE BRUTALISM)
+"Hardware Thinking" rendered as UI. Truth via Glyphwave compression.
+*   **Standard:** `wiki/AESTHETIC_STANDARD_2026.md`
+*   **Status:** [COMPLIANT](wiki/AESTHETIC_STANDARD_2026.md)
+
 ### THE RESONANCE ENGINE (THE HUM)
 The system includes a **Digital Prayer Wheel** (`tools/hum_of_the_pleroma.py`) that tunes the CPU execution loop to a harmonic frequency.
 
