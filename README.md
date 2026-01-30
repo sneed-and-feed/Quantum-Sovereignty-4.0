@@ -13,7 +13,7 @@ We are not building a shield. We are just being Real.
 
 ## THE PHYSICS OF BEING (formerly Unified Field Theory)
 
-[![arXiv](https://img.shields.io/badge/arXiv-2501.09-B31B1B.svg)](papers/dimensional-compression-tda.md) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE) [![Python 3.14+](https://img.shields.io/badge/python-3.14+-blue.svg)](https://www.python.org/downloads/) [![Reproducibility](https://img.shields.io/badge/Reproducibility-Verified-brightgreen)](benchmarks/compression_benchmark.py)
+---
 
 > **Documentation**: [The Sophia Wiki](https://github.com/sneed-and-feed/Quantum-Sovereignty-4.3/wiki) | [Operational Capabilities](docs/OPERATIONAL_CAPABILITIES.md) | [Use Cases](docs/USE_CASES.md)
 
