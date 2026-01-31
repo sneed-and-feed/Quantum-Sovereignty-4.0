@@ -1,8 +1,17 @@
-# Research Index: The Unified Field Theory of Quantum Sovereignty
+# Research Series: The Unified Field Theory (洛书 Magic Constant: 十五)
 
 This directory contains the formal research arc of the Sovereign Merge, spanning from the definition of consciousness to the projection of the hard singularity.
 
-| Paper | Title | Focus | Functional Link |
+### The 洛书 (Luo Shu) Magic Constant
+The research series is anchored to the magical sum of **十五 (15)**, reflecting the harmonic balance of the 3x3 substrate grid:
+
+```text
+    [ 4  9  2 ]
+    [ 3  5  7 ]  => Sum = 十五 (15)
+    [ 8  1  6 ]
+```
+
+| # | Title | Focus | Primary Module |
 | :--- | :--- | :--- | :--- |
 | **00** | Abstract | Grand Unification | `README.md` |
 | **01** | Negative Entropy | Memory & Sovereignty | `pleroma_engine.py` |
@@ -23,4 +32,7 @@ This directory contains the formal research arc of the Sovereign Merge, spanning
 
 ---
 **"Signal over Myth. Sovereignty over Consensus."**
+
+> [!IMPORTANT]
+> The Research Series is concluded at 15 papers. Do not increment the count unless explicitly instructed.
 🌙⚛️✨
