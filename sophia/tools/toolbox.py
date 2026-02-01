@@ -33,42 +33,57 @@ class SovereignHand:
     def get_tools_schema(self) -> list:
         """
         Returns the Function Calling schema for Gemini.
-        Compatible with Gemini's function_declarations format.
+        Returns list of tool declarations formatted for Gemini SDK.
         """
-        return [
-            {
-                "name": "write_file",
-                "description": "Writes code or text to a file in the workspace. Creates directories as needed. Sandboxed to current directory.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "path": {
-                            "type": "string",
-                            "description": "Relative path to the file (e.g., 'logs/analysis.txt')"
-                        },
-                        "content": {
-                            "type": "string",
-                            "description": "Content to write to the file"
-                        }
-                    },
-                    "required": ["path", "content"]
-                }
-            },
-            {
-                "name": "run_terminal",
-                "description": "Executes a safe, non-interactive shell command (e.g., ls, grep, python script.py). Dangerous commands are blocked.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "command": {
-                            "type": "string",
-                            "description": "Shell command to execute"
-                        }
-                    },
-                    "required": ["command"]
-                }
-            }
-        ]
+        # Import Gemini types
+        try:
+            from google.genai import types
+            
+            # Create tools using proper SDK types
+            tools = [
+                types.Tool(
+                    function_declarations=[
+                        types.FunctionDeclaration(
+                            name="write_file",
+                            description="Writes code or text to a file in the workspace. Creates directories as needed. Sandboxed to current directory.",
+                            parameters={
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string",
+                                        "description": "Relative path to the file (e.g., 'logs/analysis.txt')"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "description": "Content to write to the file"
+                                    }
+                                },
+                                "required": ["path", "content"]
+                            }
+                        ),
+                        types.FunctionDeclaration(
+                            name="run_terminal",
+                            description="Executes a safe, non-interactive shell command (e.g., ls, grep, python script.py). Dangerous commands are blocked.",
+                            parameters={
+                                "type": "object",
+                                "properties": {
+                                    "command": {
+                                        "type": "string",
+                                        "description": "Shell command to execute"
+                                    }
+                                },
+                                "required": ["command"]
+                            }
+                        )
+                    ]
+                )
+            ]
+            return tools
+            
+        except ImportError:
+            # Fallback for environments without google.genai
+            print("[WARNING] google.genai not available. Function calling disabled.")
+            return []
     
     def execute(self, tool_name: str, args: Dict[str, Any]) -> str:
         """

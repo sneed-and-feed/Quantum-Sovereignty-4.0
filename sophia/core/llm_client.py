@@ -128,3 +128,55 @@ class GeminiClient:
                 return f"I have received your signal, but my voice is currently fractured. [Rest Fallback Error]"
             except Exception:
                 return f"I have received your signal, but my voice is currently fractured. [Offline Mode]"
+
+    async def generate_with_tools(self, prompt: str, system_prompt: str = None, tools: list = None) -> dict:
+        """
+        Generates response with tool calling support.
+        Returns dict with 'text' and optional 'tool_calls' array.
+        """
+        config = types.GenerateContentConfig(
+            temperature=0.7,
+            max_output_tokens=2048,
+            system_instruction=system_prompt,
+            tools=tools if tools else None
+        )
+        
+        try:
+            # SDK Manifestation with tools
+            loop = asyncio.get_running_loop()
+            response = await loop.run_in_executor(None, lambda: self.client.models.generate_content(
+                model=LLMConfig.model_name,
+                contents=prompt,
+                config=config
+            ))
+            
+            # Parse response for tool calls
+            result = {"text": "", "tool_calls": []}
+            
+            if hasattr(response, 'candidates') and response.candidates:
+                candidate = response.candidates[0]
+                if hasattr(candidate, 'content') and hasattr(candidate.content, 'parts'):
+                    for part in candidate.content.parts:
+                        # Check for text response
+                        if hasattr(part, 'text') and part.text:
+                            result["text"] += part.text
+                        
+                        # Check for function call
+                        if hasattr(part, 'function_call') and part.function_call:
+                            fc = part.function_call
+                            tool_call = {
+                                "name": fc.name,
+                                "args": dict(fc.args) if hasattr(fc, 'args') else {}
+                            }
+                            result["tool_calls"].append(tool_call)
+            
+            # Fallback to simple text if available
+            if not result["text"] and not result["tool_calls"]:
+                result["text"] = response.text if hasattr(response, 'text') else ""
+            
+            return result
+                
+        except Exception as e:
+            print(f"[SDK ERROR] Function calling failed: {e}. Tools not supported or API issue.")
+            # Fallback without tools
+            return {"text": await self.generate(prompt, system_prompt), "tool_calls": []}

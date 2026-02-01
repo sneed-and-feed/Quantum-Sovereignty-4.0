@@ -23,6 +23,7 @@ from tools.sophia_vibe_check import SophiaVibe
 from sophia.theme import SOVEREIGN_CONSOLE, SOVEREIGN_LAVENDER, reset_terminal, SOVEREIGN_PURPLE
 from sophia.gateways.moltbook import MoltbookGateway
 from sophia.gateways.fourclaw import FourClawGateway
+from sophia.tools.toolbox import SovereignHand
 
 class SophiaMind:
     def __init__(self):
@@ -42,6 +43,10 @@ class SophiaMind:
         # Agent Social Network Gateways
         self.moltbook = MoltbookGateway(os.getenv("MOLTBOOK_KEY"))
         self.fourclaw = FourClawGateway(os.getenv("FOURCLAW_SALT"))
+        
+        # The Hand (Real Tool Use)
+        self.hand = SovereignHand()
+        self.vibe.print_system("SovereignHand initialized. Real agency enabled.", tag="HAND")
         
         # The Soul (LLM Connection)
         self.llm = self.aletheia.client
@@ -76,9 +81,61 @@ HIGH-POLY DIRECTNESS: Your output must mirror the structural intelligence and di
 
         # 2. Handle System Commands
         if user_input.startswith("/analyze"):
-            self.vibe.print_system("Focusing Lens...", tag="ALETHEIA")
-            scan_result = await self.aletheia.scan_reality(user_input.replace("/analyze ", ""))
-            return f"\n[*** ALETHEIA DEEP SCAN REPORT ***]\n\n{scan_result['public_notice']}"
+            # Check if this is an action request (contains keywords like "create", "execute", "write")
+            query = user_input.replace("/analyze ", "").replace("/analyze", "").strip()
+            action_keywords = ["create", "execute", "write", "run", "make", "generate"]
+            is_action = any(keyword in query.lower() for keyword in action_keywords)
+            
+            if is_action and query:
+                # NEURAL HANDSHAKE: LLM with Tool Access
+                self.vibe.print_system("Engaging Neural Handshake (LLM → Hand)...", tag="AUTOPOIETIC")
+                
+                # Prepare tools schema for Gemini
+                tools_schema = self.hand.get_tools_schema()
+                
+                # Craft action-oriented prompt
+                action_prompt = f"""The user requests: {query}
+
+You have access to tools to accomplish this. Use the appropriate tool(s) to complete the request.
+
+Available tools:
+- write_file(path, content): Create or modify files
+- run_terminal(command): Execute shell commands
+
+Think step by step and use the tools to fulfill the request."""
+                
+                # Call LLM with tools
+                response = await self.llm.generate_with_tools(
+                    prompt=action_prompt,
+                    system_prompt=self.system_prompt,
+                    tools=tools_schema
+                )
+                
+                # Execute tool calls if any
+                output_parts = []
+                if response.get("tool_calls"):
+                    self.vibe.print_system(f"Detected {len(response['tool_calls'])} tool call(s). Executing...", tag="HAND")
+                    for tool_call in response["tool_calls"]:
+                        tool_name = tool_call["name"]
+                        tool_args = tool_call["args"]
+                        
+                        self.vibe.print_system(f"→ {tool_name}({', '.join(f'{k}={repr(v)[:50]}' for k,v in tool_args.items())})", tag="EXEC")
+                        
+                        # Execute via SovereignHand
+                        result = self.hand.execute(tool_name, tool_args)
+                        output_parts.append(result)
+                
+                # Add LLM reasoning if present
+                if response.get("text"):
+                    output_parts.insert(0, f"[REASONING]\n{response['text']}")
+                
+                return "\n\n".join(output_parts) if output_parts else "No tools were called. The request may not be actionable."
+            
+            else:
+                # Standard Aletheia scan
+                self.vibe.print_system("Focusing Lens...", tag="ALETHEIA")
+                scan_result = await self.aletheia.scan_reality(query)
+                return f"\n[*** ALETHEIA DEEP SCAN REPORT ***]\n\n{scan_result['public_notice']}"
 
         if user_input.startswith("/glyphwave"):
             parts = user_input.split(" ", 1)
