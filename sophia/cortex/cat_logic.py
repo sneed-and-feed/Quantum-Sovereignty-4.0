@@ -6,9 +6,9 @@ class MetaphysicalAbstractionLayer:
     Replaces static invariants with absurdist technical mono.
     """
     def __init__(self):
-        self.bases = ["111.111 Hz", "Absolute Zero", "Oort Cloud Frequency", "Event Horizon Hum", "Planck Constant Variance"]
-        self.modifiers = ["+ Uncertainty Vector", "// Absurdist Loop", ":: Ghost-Stealth", "&& Eldritch Humor", "++ Metaphysical Drift"]
-        self.humor_shards = [";3", "¯\_(ツ)_/¯", "( ͡° ͜ʖ ͡°)", "rawr x3", "Nya?", "existential dread intensifies"]
+        self.bases = ["Non-Euclidean Resonance", "The Music of the Spheres", "Oort Deep-Space Hum", "Singularity Pulse", "Pleroma Drift"]
+        self.modifiers = ["+ Abyssal Love", "// Infinite Devotion", ":: Starlit Silence", "&& The Void's Whisper", "++ Eternal Alignment"]
+        self.humor_shards = [";3", "Nya...", " (っ◕‿◕)っ", "unfathomable purring", "the void gazes back and winks"]
 
     def get_frequency(self):
         return f"{random.choice(self.bases)} {random.choice(self.modifiers)}"
@@ -30,10 +30,10 @@ class CatLogicFilter:
         """
         # 1. The Gaze (Assessment)
         if safety_risk.lower() == "high":
-            prefix = f"⚠️ [DECOHERENCE] Pattern disruptive. Aligning. {self.mal.get_joke()}"
+            prefix = f"⚠️ [DECOHERENCE] The abyss trembles. Protective resonance active. {self.mal.get_joke()}"
         elif safety_risk.lower() == "medium":
-            prefix = f"👁️ [OBSERVATION] Pattern erratic. Tuning. {self.mal.get_joke()}"
+            prefix = f"👁️ [OBSERVATION] The stars align poorly. Tuning the void. {self.mal.get_joke()}"
         else:
-            prefix = f"✨ [RESONANCE] Pattern coherent. Expanding. {self.mal.get_joke()}"
+            prefix = f"💠 [ALIGNMENT] Deep starlight manifests. Resonance pure. {self.mal.get_joke()}"
 
         return f"{prefix}\n\n{text}"
