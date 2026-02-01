@@ -1,7 +1,12 @@
-import os
-import asyncio
 import sys
+import asyncio
 import time
+import io
+
+# Signal Encoding Protocol (Fixes Windows PowerShell display issues)
+if sys.platform == "win32":
+    sys.stdout.reconfigure(encoding='utf-8')
+    sys.stderr.reconfigure(encoding='utf-8')
 from sophia.cortex.aletheia_lens import AletheiaPipeline
 from sophia.cortex.lethe import LetheEngine
 from sophia.cortex.glyphwave import GlyphwaveCodec
