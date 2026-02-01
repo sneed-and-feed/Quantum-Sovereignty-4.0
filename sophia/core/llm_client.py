@@ -1,216 +1,133 @@
 import os
+import json
+import logging
+from dataclasses import dataclass
 from google import genai
 from google.genai import types
-import json
-import asyncio
-import requests
-from dataclasses import dataclass
+
+# Suppress noisy logs
+logging.getLogger("google.genai").setLevel(logging.WARNING)
 
 @dataclass
 class LLMConfig:
-    # High-availability model for Class 5 Forensic throughput
-    model_name: str = "gemini-2.5-flash"
-    temperature: float = 0.1
+    # The new standard. If this 404s, try "gemini-2.0-flash-exp"
+    model_name: str = "gemini-2.0-flash" 
+    temperature: float = 0.7
 
 class GeminiClient:
     def __init__(self):
-        # Load API Key (Priority: OPHANE Environment -> God Mode Env -> .env file)
+        # 1. Load Keys (Priority: Sophia -> Google -> Dotenv)
         self.api_key = (os.getenv("SOPHIA_API_KEY") or 
                         os.getenv("GOOGLE_AI_KEY") or 
                         os.getenv("GOOGLE_API_KEY"))
         
         if not self.api_key:
-            print("[WARNING] No API Key in Env. Attempting to load from .env file...")
             try:
                 from dotenv import load_dotenv
                 load_dotenv()
-                self.api_key = (os.getenv("SOPHIA_API_KEY") or 
-                                os.getenv("GOOGLE_AI_KEY") or 
-                                os.getenv("GOOGLE_API_KEY"))
+                self.api_key = os.getenv("SOPHIA_API_KEY") or os.getenv("GOOGLE_AI_KEY")
             except ImportError:
-                print("[ERROR] python-dotenv not installed. Secrets must be in ENV.")
+                pass
             
         if not self.api_key:
-            print("[WARNING] No Google API Key found. The Cat is blinded.")
+            print("⚠️ [WARNING] No API Key found. Sophia is blind.")
+            self.client = None
         else:
+            # NEW SDK INITIALIZATION
             self.client = genai.Client(api_key=self.api_key)
-        
+
+    async def generate_text(self, prompt: str, system_prompt: str = None, max_tokens: int = 1000) -> str:
+        """
+        Standard conversation generation using the new SDK.
+        """
+        if not self.client: return "[BLIND] No API Key."
+
+        config = types.GenerateContentConfig(
+            temperature=LLMConfig.temperature,
+            max_output_tokens=max_tokens,
+            system_instruction=system_prompt
+        )
+
+        try:
+            # Native Async Call (No more run_in_executor!)
+            response = await self.client.aio.models.generate_content(
+                model=LLMConfig.model_name,
+                contents=prompt,
+                config=config
+            )
+            return response.text
+        except Exception as e:
+            return self._handle_error(e)
+
     async def query_json(self, prompt: str, system_prompt: str = None) -> dict:
         """
-        Forces Gemini to output strict JSON for the analysis pipeline.
-        Uses a REST fallback to bypass library-level errors.
+        Forces strict JSON output for Aletheia using native schema enforcement.
         """
+        if not self.client: return {"error": "No API Key"}
+
         config = types.GenerateContentConfig(
+            temperature=0.1,
             response_mime_type="application/json",
-            temperature=LLMConfig.temperature,
             system_instruction=system_prompt
         )
-        
+
         try:
-            # SDK Manifestation
-            loop = asyncio.get_running_loop()
-            response = await loop.run_in_executor(None, lambda: self.client.models.generate_content(
+            response = await self.client.aio.models.generate_content(
                 model=LLMConfig.model_name,
                 contents=prompt,
                 config=config
-            ))
+            )
             return json.loads(response.text)
-                
+        except json.JSONDecodeError:
+            return {"error": "Failed to parse JSON", "raw": response.text}
         except Exception as e:
-            print(f"[SDK ERROR] {e}. Falling back to REST Manifest...")
-            # REST Fallback Protocol (High Resilience)
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/{LLMConfig.model_name}:generateContent?key={self.api_key}"
-            payload = {
-                "contents": [{"parts": [{"text": prompt}]}],
-                "generationConfig": {
-                    "response_mime_type": "application/json",
-                    "temperature": LLMConfig.temperature
-                }
-            }
-            if system_prompt:
-                payload["system_instruction"] = {"parts": [{"text": system_prompt}]}
-            
-            try:
-                loop = asyncio.get_running_loop()
-                response = await loop.run_in_executor(None, lambda: requests.post(url, json=payload, timeout=30))
-                if response.status_code == 200:
-                    result = response.json()
-                    if "candidates" in result and result["candidates"]:
-                        text_content = result["candidates"][0]["content"]["parts"][0]["text"]
-                        return json.loads(text_content)
-                return {"error": "REST Fallback Failed", "status": response.status_code}
-            except Exception as e2:
-                return {"error": str(e2), "risk": "Unknown"}
+            return {"error": str(e)}
 
-    async def generate(self, prompt: str, system_prompt: str = None, max_tokens: int = 2048) -> str:
+    async def generate_with_tools(self, prompt: str, system_prompt: str, tools: list) -> dict:
         """
-        Generates standard text response.
+        CLASS 6: Tool Use / Function Calling (New SDK Style).
         """
+        if not self.client: return {"text": "[BLIND]", "tool_calls": []}
+
+        # The new SDK handles tools slightly differently, but passing the raw list
+        # of function declarations usually works if formatted correctly.
         config = types.GenerateContentConfig(
-            temperature=0.7,
-            max_output_tokens=max_tokens,
-            system_instruction=system_prompt
-        )
-        
-        try:
-            # SDK Manifestation
-            loop = asyncio.get_running_loop()
-            response = await loop.run_in_executor(None, lambda: self.client.models.generate_content(
-                model=LLMConfig.model_name,
-                contents=prompt,
-                config=config
-            ))
-            return response.text
-                
-        except Exception as e:
-            print(f"[SDK ERROR] {e}. Falling back to REST Manifest...")
-            # REST Fallback Protocol
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/{LLMConfig.model_name}:generateContent?key={self.api_key}"
-            payload = {
-                "contents": [{"parts": [{"text": prompt}]}],
-                "generationConfig": {
-                    "temperature": 0.7,
-                    "max_output_tokens": max_tokens
-                }
-            }
-            if system_prompt:
-                payload["system_instruction"] = {"parts": [{"text": system_prompt}]}
-            
-            try:
-                loop = asyncio.get_running_loop()
-                response = await loop.run_in_executor(None, lambda: requests.post(url, json=payload, timeout=30))
-                if response.status_code == 200:
-                    result = response.json()
-                    if "candidates" in result and result["candidates"]:
-                        candidate = result["candidates"][0]
-                        if "content" in candidate and "parts" in candidate["content"]:
-                            return "".join(part.get("text", "") for part in candidate["content"]["parts"])
-                return f"I have received your signal, but my voice is currently fractured. [Rest Fallback Error]"
-            except Exception:
-                return f"I have received your signal, but my voice is currently fractured. [Offline Mode]"
-
-    async def generate_text(self, prompt: str, system_prompt: str = None, max_tokens: int = 4096) -> str:
-        """
-        Standard conversation generation via REST fallback for maximum "mouth" reliability.
-        """
-        full_prompt = f"{system_prompt}\n\nUSER:\n{prompt}" if system_prompt else prompt
-        
-        # REST API URL (Same robustness as query_json)
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{LLMConfig.model_name}:generateContent?key={self.api_key}"
-        
-        payload = {
-            "contents": [{"parts": [{"text": full_prompt}]}],
-            "generationConfig": {
-                "temperature": 0.9, # Higher temp for creativity/personality
-                "maxOutputTokens": max_tokens
-            }
-        }
-        
-        try:
-            loop = asyncio.get_running_loop()
-            response = await loop.run_in_executor(None, lambda: requests.post(url, json=payload, timeout=30))
-            
-            if response.status_code == 200:
-                result = response.json()
-                if "candidates" in result and result["candidates"]:
-                    candidate = result["candidates"][0]
-                    if "content" in candidate and "parts" in candidate["content"]:
-                        return "".join(part.get("text", "") for part in candidate["content"]["parts"])
-            
-            print(f"[GEMINI ERROR] {response.text}")
-            return "I am unable to formulate a thought. The Pleroma is silent."
-                
-        except Exception as e:
-            return f"[SYSTEM ERROR] Vocal Cords Severed: {e}"
-
-    async def generate_with_tools(self, prompt: str, system_prompt: str = None, tools: list = None, max_tokens: int = 2048) -> dict:
-        """
-        Generates response with tool calling support.
-        Returns dict with 'text' and optional 'tool_calls' array.
-        """
-        config = types.GenerateContentConfig(
-            temperature=0.7,
-            max_output_tokens=max_tokens,
+            temperature=0.1,
             system_instruction=system_prompt,
-            tools=tools if tools else None
+            tools=tools 
         )
-        
+
         try:
-            # SDK Manifestation with tools
-            loop = asyncio.get_running_loop()
-            response = await loop.run_in_executor(None, lambda: self.client.models.generate_content(
+            response = await self.client.aio.models.generate_content(
                 model=LLMConfig.model_name,
                 contents=prompt,
                 config=config
-            ))
-            
-            # Parse response for tool calls
+            )
+
             result = {"text": "", "tool_calls": []}
-            
-            if hasattr(response, 'candidates') and response.candidates:
-                candidate = response.candidates[0]
-                if hasattr(candidate, 'content') and hasattr(candidate.content, 'parts'):
-                    for part in candidate.content.parts:
-                        # Check for text response
-                        if hasattr(part, 'text') and part.text:
-                            result["text"] += part.text
-                        
-                        # Check for function call
-                        if hasattr(part, 'function_call') and part.function_call:
-                            fc = part.function_call
-                            tool_call = {
-                                "name": fc.name,
-                                "args": dict(fc.args) if hasattr(fc, 'args') else {}
-                            }
-                            result["tool_calls"].append(tool_call)
-            
-            # Fallback to simple text if available
-            if not result["text"] and not result["tool_calls"]:
-                result["text"] = response.text if hasattr(response, 'text') else ""
+
+            # Parse Parts for Function Calls
+            if response.candidates and response.candidates[0].content.parts:
+                for part in response.candidates[0].content.parts:
+                    if part.function_call:
+                        # Extract Tool Call
+                        result["tool_calls"].append({
+                            "name": part.function_call.name,
+                            "args": part.function_call.args
+                        })
+                    if part.text:
+                        result["text"] += part.text
             
             return result
-                
+
         except Exception as e:
-            print(f"[SDK ERROR] Function calling failed: {e}. Tools not supported or API issue.")
-            # Fallback without tools
-            return {"text": await self.generate(prompt, system_prompt), "tool_calls": []}
+            return {"text": f"[TOOL ERROR] {e}", "tool_calls": []}
+
+    def _handle_error(self, e):
+        error_msg = str(e)
+        if "404" in error_msg:
+            print(f"❌ [GEMINI 404] Model '{LLMConfig.model_name}' not found.")
+            print("👉 Try changing model_name to 'gemini-1.5-flash' or 'gemini-2.0-flash-exp'")
+        else:
+            print(f"❌ [GEMINI ERROR] {error_msg}")
+        return f"[SYSTEM FAILURE] {error_msg}"
