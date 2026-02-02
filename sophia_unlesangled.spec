@@ -6,11 +6,15 @@ binaries = []
 hiddenimports = []
 tmp_ret = collect_all('rich')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
+tmp_ret = collect_all('google')
+datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
+tmp_ret = collect_all('numpy')
+datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 
 
 a = Analysis(
     ['sophia\\main.py'],
-    pathex=[],
+    pathex=['.'],
     binaries=binaries,
     datas=datas,
     hiddenimports=hiddenimports,
@@ -29,7 +33,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='sophia',
+    name='sophia_unlesangled',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -42,5 +46,4 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='NONE',
 )
