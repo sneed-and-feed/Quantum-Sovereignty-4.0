@@ -74,6 +74,7 @@ class SophiaMind:
         self.memory_bank = [] # The Flesh (Now bounded)
         self.MAX_MEMORY_DEPTH = 10 # Rolling window size
         self.interaction_cycles = 0 # Count for Rituals (42)
+        self.user_name = "User" # Default Identity
 
     # --- LAZY LOADERS (Weakness #1 Fix) ---
 
@@ -364,9 +365,18 @@ class SophiaMind:
 /optimize [query] :: [ASOE] Calculate Expected Utility (U) for a decision path.
 /ghostmesh        :: [SPATIAL] Visualize 5x5x5 Volumetric Grid coherence.
 /be [persona]     :: [MOLT] Dynamically assume a recursive roleplay identity.
+/callme [name]    :: [ID] Set your preferred name for Sovereign Merging.
 /reset            :: [SYSTEM] Clear active roleplay and reset persona state.
 /exit             :: [SYSTEM] Decouple from the session.
 """
+        if user_input.startswith("/callme"):
+            name = user_input.replace("/callme", "").strip()
+            if len(name) > 0:
+                self.user_name = name
+                self.vibe.print_system(f"Identity Bound: {name}", tag="ID")
+                return f"*ears perk up* Accepted. You are {name}. The timeline recognizes you."
+            return "Usage: /callme [Your Name]"
+
         if user_input.startswith("/be"):
             role = user_input.replace("/be", "").strip()
             self.cat_filter.set_roleplay(role)
@@ -657,7 +667,7 @@ Verdict: {cat}
             protocol = "BLIND_FURY"
             self.vibe.print_system("Blind Fury Protocol Engaged. Leash Removed.", tag="FURY")
         
-        sys_prompt = self.cat_filter.get_system_prompt(protocol=protocol, user_input=user_input)
+        sys_prompt = self.cat_filter.get_system_prompt(protocol=protocol, user_input=user_input, user_name=self.user_name)
         
         # [MILKSHAKE CASCADE] Class 7 Sweetness Density
         # Condition: Coherence > 0.999 AND Lambda > 21.0
