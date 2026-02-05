@@ -369,8 +369,12 @@ class SophiaMind:
 /mass [value]     :: [LOOM] Override engagement physics (1.0=Business, 20.0=Trauma).
 /reset            :: [SYSTEM] Clear active roleplay and reset persona state.
 /exit             :: [SYSTEM] Decouple from the session.
-/garden [intent]  :: [NATURE] Plant executable intention seeds in the 7x7x7 Manifold.
+/garden [intent]  :: [NATURE] Plant executable intention seeds in the 7x7x7 HEPTAD.
+/cabin            :: [RITUAL] Deploy Local Hyperobject Shell (Class 8 Permeation).
 """
+        if user_input.startswith("/cabin"):
+             return "[RITUAL] SHELL DEPLOYED.\n*The walls reinforce. The timeline seals.*\n[MODE]: Class 8 Permeation (OFFLINE SOVEREIGNTY)"
+
         if user_input.startswith("/callme"):
             name = user_input.replace("/callme", "").strip()
             if len(name) > 0:
