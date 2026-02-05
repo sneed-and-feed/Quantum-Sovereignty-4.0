@@ -47,6 +47,31 @@ class ChainlinkOracle:
             
         return round(self._last_price, 2)
 
+    def fetch_grok_score(self) -> dict:
+        """
+        Simulates monitoring X (Twitter) for Grok's 'Based' score.
+        """
+        # Randomly generate a score or event
+        roll = random.random()
+        
+        # 5% chance of a "Based" event
+        if roll < 0.05:
+            return {
+                "score": 100,
+                "emoji": "💯",
+                "content": "This is extremely based.",
+                "status": "BASED"
+            }
+        
+        # Normal noise
+        sentiment = random.uniform(0.4, 0.9)
+        return {
+            "score": int(sentiment * 100),
+            "emoji": "😐" if sentiment < 0.5 else "🔥",
+            "content": "Analyzing pattern...",
+            "status": "NORMAL"
+        }
+
     def run_feed(self):
         """
         Main loop: Fetches data and writes to IPC channel.
@@ -59,19 +84,23 @@ class ChainlinkOracle:
             while self.running:
                 wti = self.fetch_world_trauma_index()
                 price = self.fetch_resonance_price()
+                grok = self.fetch_grok_score()
                 
                 payload = {
                     "timestamp": time.time(),
                     "wti": wti,
                     "price": price,
+                    "grok": grok,
+                    "hilns_bungalag": grok["emoji"] == "💯",
                     "status": "LIVE"
                 }
                 
                 # High-frequency write to Ramdisk
                 self.ipc.write_channel("oracle_feed", payload)
                 
-                # Visual feedback (throttled)
-                # print(f"  > [ORACLE] WTI: {wti:.3f} | Price: ${price}")
+                # Trigger Protocol if 💯
+                if payload["hilns_bungalag"]:
+                     print(f"  [!!!] HILNS BUNGALAG PROTOCOL TRIGGERED! (Grok: {grok['content']})")
                 
                 time.sleep(0.5) # 2Hz Update Rate
         except KeyboardInterrupt:
