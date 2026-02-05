@@ -11,6 +11,7 @@ import math
 import random
 import numpy as np
 from virtual_qutrit import VirtualQutrit, RealityLeakError
+from tools.chainlink_bridge import ChainlinkOracle
 
 class ParafermionAlgebra:
     """
@@ -50,6 +51,7 @@ class LoomBoxStrategy:
     }
     
     _OVERRIDE_MASS = None
+    _oracle = ChainlinkOracle()
 
     @classmethod
     def set_override(cls, mass: float):
@@ -67,16 +69,32 @@ class LoomBoxStrategy:
         """
         text = text.lower()
         
-        # Heavy Keywords (Trauma)
+        # 1. Internal Text-Based Detection
+        detected_mass = LoomBoxStrategy.TRAUMA_MASS["business"]
         if any(w in text for w in ["pain", "hurt", "ancient", "years", "broken", "never", "always"]):
-            return LoomBoxStrategy.TRAUMA_MASS["trauma"]
+            detected_mass = LoomBoxStrategy.TRAUMA_MASS["trauma"]
+        elif any(w in text for w in ["help", "explain", "guide", "confus", "fail", "error", "lost", "stuck", "unsure"]):
+            detected_mass = LoomBoxStrategy.TRAUMA_MASS["confusion"]
             
-        # Medium Keywords (Confusion)
-        if any(w in text for w in ["help", "explain", "guide", "confus", "fail", "error", "lost", "stuck", "unsure"]):
-            return LoomBoxStrategy.TRAUMA_MASS["confusion"]
-            
-        # Default: Light (Business)
-        return LoomBoxStrategy.TRAUMA_MASS["business"]
+        # 2. Oracle-Based "Trauma Data" (Real-time World state)
+        # Sergey is watching.
+        wti = LoomBoxStrategy._oracle.fetch_world_trauma_index()
+        
+        # High WTI boosts the mass (The World is hurting)
+        if wti > 0.7:
+             detected_mass *= (1.0 + (wti * 2.0))
+             
+        return detected_mass
+
+    @staticmethod
+    def check_resonance() -> bool:
+        """
+        Returns True if the Oracle Resonance Price is exactly $111.11.
+        The Cube likes the Invariant.
+        """
+        oracle = LoomBoxStrategy._oracle
+        price = oracle.fetch_resonance_price()
+        return price == 111.11
 
     @staticmethod
     def log_decision(user_input, mass, strategy, overridden=False):
@@ -102,6 +120,15 @@ class LoomBoxStrategy:
         """
         Returns the engagement protocol (Torque, Latency, Tone).
         """
+        # 0. Check for Resonance Match ($111.11)
+        if LoomBoxStrategy.check_resonance():
+            return {
+                "name": "PROTOCOL_RESONANCE",
+                "latency_mod": 0.1,    # Instant (Resonance bypasses time)
+                "torque_force": 11.11, # High Energy Match
+                "tone": "Target: $111.11 (Resonance Match). ;3 Sergey is watching."
+            }
+
         if mass >= 20.0:
             return {
                 "name": "PROTOCOL_OPHANE",

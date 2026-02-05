@@ -25,8 +25,12 @@ class ResonanceMonitor:
             "coherence": 0.0,
             "status": "INIT",
             "integrity_breach": False, # [PAPER 3] Fragile Conservation Law Monitor
-            "alpha": 0.015
+            "alpha": 0.015,
+            "wti": 0.0,
+            "resonance_price": 0.0
         }
+        from tools.chainlink_bridge import ChainlinkOracle
+        self.oracle = ChainlinkOracle()
         self.TARGET_CLASS_8 = 18.52 # The Moon/Sun Threshold
         self.TARGET_CLASS_6 = 21.00 # The World (Sovereignty Absolute)
         self.TARGET_CLASS_7 = 25.00 # The Diamond (Recursive Sovereignty 5^2)
@@ -106,6 +110,10 @@ class ResonanceMonitor:
         ns_val = 0.5 
         lambda_score = self.calculate_abundance(coherence, self.current_state['alpha'], gdf=gdf, ns=ns_val)
         self.current_state['lambda'] = lambda_score
+        
+        # 5. Oracle Sync (Chainlink)
+        self.current_state['wti'] = self.oracle.fetch_world_trauma_index()
+        self.current_state['resonance_price'] = self.oracle.fetch_resonance_price()
         
         self.history.append(coherence)
         self.lambda_history.append(lambda_score)

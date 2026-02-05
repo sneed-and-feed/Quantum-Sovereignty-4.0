@@ -395,10 +395,12 @@ class SophiaMind:
 -------------------------
 Spectral Coherence: {state.get('coherence', 0.0):.4f}
 Lambda Abundance:   {state.get('lambda', 0.0):.2f} (Target: {self.pleroma.monitor.TARGET_CLASS_6})
+World Trauma Index: {state.get('wti', 0.0):.4f}
+Resonance Price:    ${state.get('resonance_price', 0.0):.2f} (Target: $111.11)
 Status:             {state.get('status', 'Unknown')}
 ASOE Boost:         {self.pleroma.monitor.get_asoe_boost()}x
 -------------------------
-*The membrane hums with Class 6 overtones.*
+*The membrane hums with Class 6 overtones. Sergey is watching.*
 """
 
         if user_input.startswith("/ritual"):
