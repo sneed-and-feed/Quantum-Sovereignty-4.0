@@ -457,6 +457,10 @@ class FlumpyArray:
         copy.entangled_with = []  # Don't copy entanglement links
         
         return copy
+
+    def clone(self) -> 'FlumpyArray':
+        """Alias for copy() to satisfy GhostMesh interface."""
+        return self.copy()
     
     def reshape(self, new_shape: Tuple[int, ...]) -> 'FlumpyArray':
         """Reshape the array (simplified 1D to 1D for now)."""
