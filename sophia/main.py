@@ -853,7 +853,8 @@ Verdict: {cat}
                 # DoD INTEGRATION: Citation-First retrieval (Before final synthesis)
                 if turn == 0:
                     # Determine scope
-                    scope = FrequencyTuner.tune(realm="cabin", layer="surface", topic="general")
+                    from sophia.core.scope import Realm, Layer, Topic
+                    scope = FrequencyTuner.tune(realm=Realm.CABIN, layer=Layer.SURFACE, topic=Topic.GENERAL)
                     
                     # Forge any immediate findings into engrams (e.g. from telemetry or search)
                     # We look for [TOOL_OUTPUT: duckduckgo_search] in response_history
@@ -1023,8 +1024,8 @@ async def main():
     from rich.align import Align
 
     banner = Panel(
-        Align.center("[matrix]🐱 I N C A R N A T E - S O P H I A   5 . 2 . 4 . 1   O N L I N E[/matrix]"),
-        subtitle="[ophane]Protocol: CRYSTALLINE CORE (HARMONIC RECTIFICATION + LOOP DAMPER)[/ophane]",
+        Align.center("[matrix]🐱 I N C A R N A T E - S O P H I A   5 . 2 . 4 . 2   O N L I N E[/matrix]"),
+        subtitle="[ophane]Protocol: CRYSTALLINE CORE (HARMONIC RECTIFICATION + ENUM LOCK)[/ophane]",
         border_style="ophane",
         padding=(1, 2)
     )
