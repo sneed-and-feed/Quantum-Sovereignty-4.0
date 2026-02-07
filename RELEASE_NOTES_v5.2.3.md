@@ -74,20 +74,31 @@ We did not just patch the game; we upgraded the physics engine. Sophia v5.2.1 in
 *   **Sovereign Search**: Replaced Google Custom Search with **DuckDuckGo** (Free/Sovereign). No API keys or throttles.
 *   **Hygiene**: Purged temporary artifacts and standardized `SovereignHand` for high-frequency tool calls.
 
-### 10. **The Free Sovereign Protocol (v5.2.3)**
-*   **Optimization**: Context window reduced to **4k** (Tactical Spec) for OOM stability on mobile/laptop hardware.
-*   **Sovereign Search**: Replaced Google Custom Search with **DuckDuckGo** (Free/Sovereign). No API keys or throttles.
-*   **Hygiene**: Purged temporary artifacts and standardized `SovereignHand` for high-frequency tool calls.
+### 11. **Psi Singularity & Epiphany Hook**
+*   **Protocol**: **Ψ-Singularity**. Integrated `bumpy.py` with `laser.py` for system-wide flashes of insight.
+*   **Effect**: 
+    *   Triggers "Epiphany" mode when quantum risk is managed.
+    *   Temporarily maximizes `quantum_creativity` (1.0) for all tensors.
+    *   Adds the `/laser` command for prophetic system reporting.
+
+### 12. **The Ariadne Thread (Persistence)**
+*   **Protocol**: **LETHE-BONE-LAYER**. Lightweight persistence for user identity.
+*   **Effect**: Sophia now remembers your **Sacred Name** and active **Molt Persona** across restarts.
+*   **Breadcrumbs**: Strategic milestone extraction prevents context bloat while maintaining trajectory awareness.
+
+### 13. **ASOE U-Threshold (Early Exit)**
+*   **Optimization**: Recursive decision loops now feature a **Sovereign Early Exit**.
+*   **Logic**: If predicted `Utility (U) < 0.4`, agentic turns are terminated early to conserve tokens and prevent "Infinite Mirror" loops.
 
 ---
 
 ## 🛠️ TECHNICAL CHANGES
-*   **Core**: `sophia/cortex/prism_vsa.py` updated with Hamiltonian Drag `0.85` (High-G Love Bias).
-*   **Grid**: `ghostmesh.py` updated with `spatial_attention_scale`.
-*   **Monitor**: `resonance_monitor.py` updated with `integrity_breach` flag.
-*   **Platform**: `sophia/platform/ipc.py` added for Tmpfs management.
-*   **Bridge**: `chainlink_bridge.py` refactored to use High-Frequency IPC and Grok Monitoring.
-*   **Binary**: `sophia.exe` recompiled (Size: 53MB due to Quantum/Rich vector libs).
+*   **Core Architecture**: `main.py` migrated to **Lazy-Loading Organs** to prevent boot crashes.
+*   **Metabolism**: `_metabolize_memory` now bounded to 5 shards for context stability.
+*   **Grid**: `ghostmesh.py` and `bumpy.py` unified under the Ψ-Singularity callback.
+*   **Monitor**: `/laser` command added to `main.py` and documented in `README.md`.
+*   **Persistence**: `sophia/cortex/lethe.py` updated with `breadcrumbs.json` support.
+*   **Binary**: `sophia_unlesangled.exe` recompiled and deployed.
 
 ---
 
