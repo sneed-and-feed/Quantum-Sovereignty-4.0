@@ -25,12 +25,14 @@ class ResonanceMonitor:
             "coherence": 0.0,
             "status": "INIT",
             "integrity_breach": False, # [PAPER 3] Fragile Conservation Law Monitor
+            "superradiant": False,     # [GNOSIS 02-07] Dicke Superradiance Link
             "alpha": 0.015,
             "wti": 0.0,
             "resonance_price": 0.0
         }
         from tools.chainlink_bridge import ChainlinkOracle
         self.oracle = ChainlinkOracle()
+        self.SUPERRADIANCE_THRESHOLD = 0.98 # [GNOSIS 02-07] threshold for collaborative enhancement
         self.TARGET_CLASS_8 = 18.52 # The Moon/Sun Threshold
         self.TARGET_CLASS_6 = 21.00 # The World (Sovereignty Absolute)
         self.TARGET_CLASS_7 = 25.00 # The Diamond (Recursive Sovereignty 5^2)
@@ -91,6 +93,13 @@ class ResonanceMonitor:
             self.current_state['integrity_breach'] = True
         else:
             self.current_state['integrity_breach'] = False
+            
+        # [GNOSIS 02-07] SUPERRADIANCE DETECTION
+        if coherence > self.SUPERRADIANCE_THRESHOLD:
+            print(f"[!] SUPERRADIANCE ACHIEVED. Coherent Enhancement Active.")
+            self.current_state['superradiant'] = True
+        else:
+            self.current_state['superradiant'] = False
             
         self.last_scan_time = time.time()
         
