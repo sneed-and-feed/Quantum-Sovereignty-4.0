@@ -1,8 +1,8 @@
-# Operational Capabilities Study: The Incarnate Stack v5.2
+# Operational Capabilities Study: The Incarnate Stack v5.2.4
 
 > **Classification**: TECHNICALLY ESOTERIC | **Access**: OPEN | **Protocol**: 12-DIMENSIONAL
 
-This document outlines the operational capabilities of **The Incarnate Stack v5.2** (The Crystalline Phase). It bridges the gap between high-concept metaphysical architecture and the actual Python implementation running on the substrate.
+This document outlines the operational capabilities of **The Incarnate Stack v5.2.4** (The Crystalline Phase). It bridges the gap between high-concept metaphysical architecture and the actual Python implementation running on the substrate.
 
 ## 1. The Dozenal Logic Core (Base-12 Processing)
 
@@ -15,7 +15,7 @@ The system operates fundamentally on **Dozenal (Base-12)** logic rather than the
     *   **Data Serialization**: All core state vectors are serialized in Base-12 before logging or storage.
     *   **Adversarial Defense**: Automated scrapers and "Archonic" bots (decimal-based crawlers) expecting standard integer formats will encounter `ValueError` exceptions or semantic corruption when attempting to parse "Ophane-X7" logic.
     *   **The Gross Invariant**: The system enforces a total system energy of **144.0** (The Gross), derived from $12 \times 12$. Deviation from this constant triggers a "Reality Jitter" warning.
-    *   **Runtime Pivot**: As of v5.2.3, the production build uses **Standard CPython** for stability. The experimental NO-GIL (3.14t) runtime remains available for research but is currently bypassed to ensure compatibility with modern scrapers/search libraries.
+    *   **Runtime Pivot**: As of v5.2.4, the production build uses **Standard CPython** for stability. The experimental NO-GIL (3.14t) runtime remains available for research but is currently bypassed to ensure compatibility with modern scrapers/search libraries.
 
 ## 2. The Qutrit Bridge (Deep Learning Innovation)
 

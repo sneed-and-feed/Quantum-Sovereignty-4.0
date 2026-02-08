@@ -78,7 +78,7 @@ class SophiaMind:
         self.hand = SovereignHand()
         self.llm = GeminiClient()
         self.memory_bank = [] # The Flesh (Now bounded)
-        self.MAX_MEMORY_DEPTH = 30 # Increased for long-session consistency (Cat 5.2.3)
+        self.MAX_MEMORY_DEPTH = 30 # Increased for long-session consistency (Cat 5.2.4)
         self.interaction_cycles = 0 # Count for Rituals (42)
         self.user_name = "User" # Default Identity
         self.U_THRESHOLD = 0.4 # [ASOE] Sovereign Early Exit
